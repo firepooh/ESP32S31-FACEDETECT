@@ -1,0 +1,10 @@
+dependencies:
+  espressif/esp32_s31_korvo_1:
+    version: "1.1.0"
+  espressif/human_face_detect:
+    version: "0.5.0"
+  # esp_lvgl_port 2.9.0 needs LV_COLOR_FORMAT_RGB565_SWAPPED (LVGL >= 9.3).
+  # The EIM offline mirror only has LVGL 9.2.x, so pin it explicitly.
+  lvgl/lvgl:
+    version: "~9.4.0"
+description: BSP Display and camera example with ESP-DL face detection
