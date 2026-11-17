@@ -26,6 +26,7 @@ BSP가 쓰는 `esp_lvgl_port` 2.9.0은 `LV_COLOR_FORMAT_RGB565_SWAPPED`를 쓴�
 EIM으로 설치한 오프라인 컴포넌트 저장소(`C:\Espressif\tools\components`)에는 LVGL 9.2.x만 있다.
 그래서 버전을 지정하지 않으면 9.2.2가 선택되고 빌드가 실패한다.
 이를 막으려고 `main/idf_component.yml`에 `lvgl/lvgl: "~9.4.0"`을 추가했다.
+자세한 내용은 [LVGL_VERSION_KO.md](LVGL_VERSION_KO.md)에 정리했다.
 
 ## 실행 방법 (PowerShell)
 
