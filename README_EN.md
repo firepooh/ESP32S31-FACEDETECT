@@ -39,6 +39,26 @@ Measured on the board. Camera: SC101IOT at 640x480, 15 fps.
 | ④ CPU 320 MHz | Replace the 240 MHz setting copied from an ESP32-S3 example with the ESP32-S31 default of 320 MHz | Camera 15.2 fps, 15 inferences/s |
 | ⑤ LVGL PPA draw | Draw the camera canvas with LVGL 9.5's PPA draw unit | Render 49 → 28 ms, inference 41 → 33 ms |
 
+### Why the model gets 320x240
+
+The display uses the full 640x480 frame. Only the model gets a copy scaled to half width and height (320x240) by the PPA, and the detected boxes are scaled back by 2 before drawing.
+
+The face model (MSR_S8_V1 + MNP_S8_V1) works in two stages ([model README](https://components.espressif.com/components/espressif/human_face_detect/versions/0.5.0/readme)):
+
+1. **Stage 1, MSR**: resizes the whole input image to 120x160 (height x width) and finds face candidates. It sees the same picture whether the input is 640x480 or 320x240.
+2. **Stage 2, MNP**: makes each candidate box square, crops it **from the input image** and resizes it to 48x48. With a 320x240 input, the crop has half the resolution.
+
+Both inputs were run on the board, alternating about 10 seconds each, three times:
+
+| Model input | PPA for model input | Per inference | Camera |
+|---|---|---|---|
+| 320x240 | 7.0 ms | ~33 ms | ~15.5 fps |
+| 640x480 | 9.1 ms | ~35 ms | ~15.5 fps |
+
+The [ESP-IDF PPA documentation](https://docs.espressif.com/projects/esp-idf/en/latest/esp32p4/api-reference/peripherals/ppa.html) states that PPA time is proportional to the amount of data in the block. Scaling down reads the same camera frame (614 KB) and only writes less (154 KB instead of 614 KB), so it saves only about 2 ms.
+
+In short, the gain is small: about 2 ms each for the PPA and the inference. The cost is that stage 2 crops at half resolution. Stage 1's smallest anchor is 16 px at the model input, so faces smaller than about 64 px on the 640x480 frame are hard to find with either input size. The faces most likely to be affected are those of roughly 64 to 96 px (estimate). Detection of small faces has not been compared yet.
+
 <img src="docs/images/pipeline_en.svg" alt="Pipeline before and after">
 
 <img src="docs/images/perf_lvgl_en.svg" alt="LVGL render time and refresh rate before and after">

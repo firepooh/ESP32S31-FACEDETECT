@@ -39,6 +39,26 @@ Espressif 워크숍 [Assignment 7](https://developer.espressif.com/workshops/int
 | ④ CPU 320 MHz | S3 예제에서 가져온 240 MHz 설정을 S31 기본값 320 MHz로 바꾼다 | 카메라 15.2 fps, 추론 초당 15회 |
 | ⑤ LVGL PPA 그리기 | LVGL 9.5의 PPA 그리기로 카메라 캔버스를 그린다 | 렌더링 49 → 28 ms, 추론 1회 41 → 33 ms |
 
+### 추론 입력을 320x240으로 줄인 이유
+
+화면에는 640x480을 그대로 쓰고, 추론에만 PPA로 가로세로를 절반으로 줄인 320x240을 넘긴다. 찾은 상자 좌표는 2배로 늘려 화면에 그린다.
+
+얼굴 검출 모델(MSR_S8_V1 + MNP_S8_V1)은 두 단계로 동작한다([모델 README](https://components.espressif.com/components/espressif/human_face_detect/versions/0.5.0/readme)).
+
+1. **1단계 MSR**: 입력 이미지 전체를 120x160(세로x가로)으로 줄여 얼굴 후보를 찾는다. 입력이 640x480이든 320x240이든 1단계가 보는 그림은 같다.
+2. **2단계 MNP**: 후보 상자를 정사각형으로 만들어 **입력 이미지에서** 잘라 낸 뒤 48x48로 줄여 확인한다. 입력이 320x240이면 잘라 내는 영역의 해상도가 절반이 된다.
+
+두 입력을 보드에서 번갈아 돌려 비교했다(각 약 10초씩 세 번).
+
+| 추론 입력 | 추론용 PPA 1회 | 추론 1회 | 카메라 |
+|---|---|---|---|
+| 320x240 | 7.0 ms | 약 33 ms | 약 15.5 fps |
+| 640x480 | 9.1 ms | 약 35 ms | 약 15.5 fps |
+
+[ESP-IDF PPA 문서](https://docs.espressif.com/projects/esp-idf/en/latest/esp32p4/api-reference/peripherals/ppa.html)에 따르면 PPA 처리 시간은 블록의 데이터 양에 비례한다. 줄여도 읽는 양(카메라 프레임 614 KB)은 같고 쓰는 양만 614 KB에서 154 KB로 줄기 때문에, 차이는 약 2 ms에 그친다.
+
+정리하면 축소로 얻는 이득은 PPA와 추론에서 각각 2 ms 안팎으로 작다. 대신 2단계에서 잘라 내는 영역의 해상도가 절반이 된다. 1단계의 가장 작은 앵커가 모델 입력 기준 16 px이므로, 640x480 화면에서 약 64 px보다 작은 얼굴은 입력 크기와 상관없이 찾기 어렵다. 축소의 영향을 받는 것은 그보다 조금 큰 약 64~96 px 얼굴로 추정된다. 작은 얼굴의 검출률은 아직 비교하지 않았다.
+
 <img src="docs/images/pipeline_ko.svg" alt="개선 전과 후의 처리 구조">
 
 <img src="docs/images/perf_lvgl_ko.svg" alt="LVGL 렌더링 시간과 화면 갱신 횟수, 적용 전후">
