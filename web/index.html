@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESP32-S31 Face Detect Flasher</title>
+  <meta name="description" content="Flash the ESP32-S31-Korvo-1 face detection demo from the browser.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>ESP32-S31 Face Detect</h1>
+      <p class="sub">Web flasher for ESP32-S31-Korvo-1 · 브라우저에서 바로 플래시</p>
+    </header>
+
+    <section id="unsupported" class="notice error" hidden>
+      This browser has no Web Serial API. Use desktop Chrome or Edge.<br>
+      이 브라우저는 Web Serial을 지원하지 않습니다. 데스크톱 Chrome 또는 Edge를 쓰세요.
+    </section>
+
+    <section class="card">
+      <h2>Firmware</h2>
+      <dl id="fw-info">
+        <dt>Loading…</dt><dd></dd>
+      </dl>
+      <table id="fw-parts" hidden>
+        <thead><tr><th>Offset</th><th>File</th><th>Size</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="links" id="fw-links"></p>
+    </section>
+
+    <section class="card">
+      <h2>Flash</h2>
+      <ol class="steps">
+        <li>Connect the board's USB Type-C <b>UART</b> port. · 보드의 UART 포트를 연결한다.</li>
+        <li>Close any serial monitor that holds the port. · 포트를 연 시리얼 터미널은 먼저 닫는다.</li>
+        <li>Click <b>Connect &amp; Flash</b> and pick the port (CP210x). · 버튼을 누르고 포트를 고른다.</li>
+      </ol>
+      <label class="check"><input type="checkbox" id="erase-all"> Erase entire flash first · 플래시 전체 지우기</label>
+      <div class="actions">
+        <button id="flash-btn" disabled>Connect &amp; Flash</button>
+      </div>
+      <div class="progress" aria-hidden="true"><div id="progress-bar"></div></div>
+      <p id="status" role="status">Waiting for firmware info…</p>
+    </section>
+
+    <section class="card">
+      <h2>Log</h2>
+      <pre id="log"></pre>
+    </section>
+
+    <footer>
+      Uses <a href="https://github.com/espressif/esptool-js">esptool-js</a> 0.7.1 ·
+      <a href="https://github.com/firepooh/ESP32S31-FACEDETECT">Source on GitHub</a>
+    </footer>
+  </main>
+  <script type="module" src="flasher.js"></script>
+</body>
+</html>

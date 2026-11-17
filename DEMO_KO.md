@@ -32,17 +32,20 @@ EIM으로 설치한 오프라인 컴포넌트 저장소(`C:\Espressif\tools\comp
 
 ## 실행 방법 (PowerShell)
 
+빌드 도구 없이 올리려면 [웹 플래셔](https://firepooh.github.io/ESP32S31-FACEDETECT/)를 쓴다. 자세한 방법은 [README.md](README.md)에 있다.
+
 ESP-IDF v6.1 환경을 활성화한다.
 
 ```powershell
 . C:\Espressif\tools\Microsoft.v6.1.PowerShell_profile.ps1
-cd C:\work\ESP32\ESP32S31-FACEDETECT\display_camera_video
+cd C:\work\esp32\ESP32S31-FACEDETECT
 ```
 
-빌드는 이미 끝나 있다. 다시 빌드하려면 아래 명령을 쓴다.
+처음 빌드할 때는 타깃을 지정한다. ESP32-S31은 프리뷰 타깃이라 `--preview`가 필요하다.
 
 ```powershell
-idf.py build
+idf.py --preview set-target esp32s31
+idf.py --preview build
 ```
 
 보드의 USB Type-C UART 포트를 PC에 연결한다.
@@ -50,7 +53,7 @@ idf.py build
 그 번호로 플래시하고 모니터를 연다.
 
 ```powershell
-idf.py -p COMxx flash monitor
+idf.py --preview -p COMxx flash monitor
 ```
 
 모니터는 `Ctrl+]`로 빠져나온다.

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 250" width="960" height="250" role="img" aria-label="LVGL 화면 렌더링 (⑤ 적용 전후)">
+<style>
+  .surface { fill: #fcfcfb; stroke: #e2e1dc; }
+  .t1 { fill: #0b0b0b; }
+  .t2 { fill: #52514e; }
+  .t3 { fill: #77756f; }
+  .grid { stroke: #e8e7e2; stroke-width: 1; }
+  .axis { stroke: #bdbbb3; stroke-width: 1; }
+  .s1 { fill: #2a78d6; }
+  .s1s { stroke: #2a78d6; }
+  .neutral { fill: #a8a69f; }
+  .accent { fill: #eb6834; }
+  .box { fill: #ffffff; stroke: #d8d6cf; }
+  .boxs1 { fill: #e9f1fb; stroke: #2a78d6; }
+  .boxacc { fill: #fdeee7; stroke: #eb6834; }
+  .cap { stroke: #77756f; stroke-dasharray: 5 4; stroke-width: 1.5; }
+  text { font-family: 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; stroke: #33322f; }
+    .t1 { fill: #f0efec; }
+    .t2 { fill: #c3c2b7; }
+    .t3 { fill: #9b998f; }
+    .grid { stroke: #2c2b29; }
+    .axis { stroke: #4a4945; }
+    .s1 { fill: #3987e5; }
+    .s1s { stroke: #3987e5; }
+    .neutral { fill: #6e6c66; }
+    .accent { fill: #d95926; }
+    .box { fill: #222220; stroke: #3d3c38; }
+    .boxs1 { fill: #1b2a3d; stroke: #3987e5; }
+    .boxacc { fill: #3a2219; stroke: #d95926; }
+    .cap { stroke: #9b998f; }
+  }
+</style>
+<rect class="surface" x="0.5" y="0.5" width="959" height="249" rx="12"/><text x="32" y="44" class="t1" font-size="18" text-anchor="start" font-weight="600">LVGL 화면 렌더링 (⑤ 적용 전후)</text><rect class="neutral" x="660" y="32" width="14" height="14" rx="3"/><text x="680" y="44" class="t2" font-size="13" text-anchor="start" font-weight="normal">CPU 그리기</text><rect class="s1" x="790" y="32" width="14" height="14" rx="3"/><text x="810" y="44" class="t2" font-size="13" text-anchor="start" font-weight="normal">PPA 그리기</text><text x="32" y="100" class="t1" font-size="14" text-anchor="start" font-weight="600">1회 렌더링</text><text x="32" y="120" class="t3" font-size="12" text-anchor="start" font-weight="normal">ms</text><path class="neutral" d="M230,80 H774.8 Q778.8,80 778.8,84 V98 Q778.8,102 774.8,102 H230 Z"/><text x="786.8" y="96" class="t1" font-size="13" text-anchor="start" font-weight="600">49</text><path class="s1" d="M230,108 H539.6 Q543.6,108 543.6,112 V126 Q543.6,130 539.6,130 H230 Z"/><text x="551.6" y="124" class="t1" font-size="13" text-anchor="start" font-weight="600">28</text><line class="axis" x1="230" y1="76" x2="230" y2="134"/><text x="32" y="182" class="t1" font-size="14" text-anchor="start" font-weight="600">화면 갱신</text><text x="32" y="202" class="t3" font-size="12" text-anchor="start" font-weight="normal">회/초</text><path class="neutral" d="M230,162 H591.8666666666668 Q595.8666666666668,162 595.8666666666668,166 V180 Q595.8666666666668,184 591.8666666666668,184 H230 Z"/><text x="603.8666666666668" y="178" class="t1" font-size="13" text-anchor="start" font-weight="600">19.6</text><path class="s1" d="M230,190 H720.6666666666666 Q724.6666666666666,190 724.6666666666666,194 V208 Q724.6666666666666,212 720.6666666666666,212 H230 Z"/><text x="732.6666666666666" y="206" class="t1" font-size="13" text-anchor="start" font-weight="600">26.5</text><line class="axis" x1="230" y1="158" x2="230" y2="216"/></svg>
