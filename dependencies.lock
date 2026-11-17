@@ -195,7 +195,7 @@ dependencies:
     - esp32h4
     version: 1.0.2
   espressif/esp_sccb_intf:
-    component_hash: c071b189e49f40940722aea01a5489f873385cc39cd5b14012341135b85d1a9d
+    component_hash: eb6a7d5c992f09583c163b2e3f5e95a0fdc87a2d9f8e026f3e59153935553889
     dependencies:
     - name: idf
       require: private
@@ -203,7 +203,7 @@ dependencies:
     source:
       registry_url: https://components.espressif.com
       type: service
-    version: 0.0.8
+    version: 0.0.9
   espressif/esp_video:
     component_hash: ef614cc04e69e117fd08272a8b347ae5972eff2d0c8659af6444f8484931c7c1
     dependencies:
@@ -278,21 +278,21 @@ dependencies:
       type: service
     version: 2.1.2
   espressif/led_strip:
-    component_hash: 28621486f77229aaf81c71f5e15d6fbf36c2949cf11094e07090593e659e7639
+    component_hash: 097f698887601de00bed7ff58f91b9e074fa1ae1bcf53582034b01191cc88e9f
     dependencies:
     - name: idf
       require: private
-      version: '>=5.0'
+      version: '>=5.2'
     source:
       registry_url: https://components.espressif.com
       type: service
-    version: 3.0.3
+    version: 3.1.0~1
   espressif/usb:
-    component_hash: 4f00ced5663505a368bafcb9bb6b2e4a5033cc5625b8f510755a75baadf4ff1d
+    component_hash: 99eee72ea224d9117d4c342442717a1f20bf8112e2ab5d7d7038b827874f4c92
     dependencies:
     - name: idf
       require: private
-      version: '>=5.4'
+      version: '>=5.5.3'
     source:
       registry_url: https://components.espressif.com
       type: service
@@ -303,7 +303,7 @@ dependencies:
     - esp32p4
     - esp32h4
     - linux
-    version: 1.4.0
+    version: 1.6.0
   espressif/usb_host_uvc:
     component_hash: 9370ff8e8701cb62e0733557458a1146334dc4f0b5c84efd33828b98573c6a59
     dependencies:
@@ -333,16 +333,16 @@ dependencies:
       type: idf
     version: 6.1.0
   lvgl/lvgl:
-    component_hash: 17e68bfd21f0edf4c3ee838e2273da840bf3930e5dbc3bfa6c1190c3aed41f9f
+    component_hash: 184e532558c1c45fefed631f3e235423d22582aafb4630f3e8885c35281a49ae
     dependencies: []
     source:
       registry_url: https://components.espressif.com/
       type: service
-    version: 9.4.0
+    version: 9.5.0
 direct_dependencies:
 - espressif/esp32_s31_korvo_1
 - espressif/human_face_detect
 - lvgl/lvgl
-manifest_hash: bf7c16d3e372ab722d3beebe3e1de1d692828660962c299bda36c9f286b2e884
+manifest_hash: 65f7fef17e0e7a607ebab561c9d07af0df8bd7d493e4f803532f183777c6e60e
 target: esp32s31
 version: 3.0.0

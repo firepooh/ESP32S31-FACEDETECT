@@ -26,6 +26,7 @@
 #include "driver/ppa.h"
 #endif
 #include "esp_private/esp_cache_private.h"
+#include "esp_cache.h"
 #include "app_video.h"
 #include "app_dl.h"
 
@@ -187,10 +188,34 @@ static void camera_video_frame_operation(uint8_t *camera_buf, uint8_t camera_buf
         return;
     }
     out_buf = cam_buff[camera_buf_index];
+
+    /* Half-size frame for face detection, scaled by PPA straight from the camera buffer.
+     * A CPU memcpy of the full frame (PSRAM to PSRAM) takes ~18 ms and stalls the stream. */
+    size_t dl_buf_size;
+    uint8_t *dl_buf = app_dl_get_input_buffer(&dl_buf_size);
+    if (dl_buf) {
+        uint32_t dl_w = out_w / 2;
+        uint32_t dl_h = out_h / 2;
+        if (app_image_process_scale_crop(camera_buf, camera_buf_hes, camera_buf_ves,
+                                         dl_buf, dl_w, dl_h, dl_buf_size, rotation) == ESP_OK) {
+            app_dl_submit(dl_w, dl_h, 2);
+        }
+    }
+#else
+    size_t dl_buf_size;
+    uint8_t *dl_buf = app_dl_get_input_buffer(&dl_buf_size);
+    if (dl_buf && out_w * out_h * 2 <= dl_buf_size) {
+        memcpy(dl_buf, out_buf, out_w * out_h * 2);
+        app_dl_submit(out_w, out_h, 1);
+    }
 #endif
 
-    static uint32_t frame_count;
-    app_dl_detect_and_draw(out_buf, out_w, out_h, ++frame_count % 5 == 0);
+    if (app_dl_draw(out_buf, out_w, out_h)) {
+        /* Boxes were drawn by the CPU. Write them back to PSRAM, because LVGL's PPA
+         * draw unit reads the canvas buffer by DMA. */
+        esp_cache_msync(out_buf, ALIGN_UP(out_w * out_h * 2, data_cache_line_size),
+                        ESP_CACHE_MSYNC_FLAG_DIR_C2M | ESP_CACHE_MSYNC_FLAG_TYPE_DATA);
+    }
 
     bsp_display_lock(0);
     lv_canvas_set_buffer(camera_canvas, out_buf, out_w, out_h, lvgl_cam_rgb565_fmt);
@@ -208,7 +233,6 @@ void app_main(void)
 
     /* Initialize Camera */
     bsp_camera_start(NULL);
-    ESP_ERROR_CHECK(app_dl_init());
 
 #if SOC_PPA_SUPPORTED
     /* Initialize PPA for scaling */
@@ -221,6 +245,9 @@ void app_main(void)
         ESP_LOGE(TAG, "Get cache alignment failed: 0x%x", ret);
         return;
     }
+
+    /* Face detection input buffer and inference task */
+    ESP_ERROR_CHECK(app_dl_init(BSP_LCD_H_RES * BSP_LCD_V_RES * 2, data_cache_line_size));
 
     /* Allocate canvas buffers */
     cam_buff_size = ALIGN_UP(BSP_LCD_H_RES * BSP_LCD_V_RES * 2, data_cache_line_size);
@@ -269,6 +296,12 @@ void app_main(void)
     camera_canvas = lv_canvas_create(lv_scr_act());
     lv_canvas_set_buffer(camera_canvas, cam_buff[0], BSP_LCD_H_RES, BSP_LCD_V_RES, lvgl_cam_rgb565_fmt);
     assert(camera_canvas);
+#if LV_USE_PPA_IMG
+    /* LVGL 9.5's PPA draw unit only accepts images with opa <= LV_OPA_MAX (253), so a fully
+     * opaque canvas would fall back to software drawing. Its blend ignores opa and always
+     * copies the image opaque, so 253 still looks fully opaque. */
+    lv_obj_set_style_image_opa(camera_canvas, LV_OPA_MAX, 0);
+#endif
     lv_obj_center(camera_canvas);
     bsp_display_unlock();
 

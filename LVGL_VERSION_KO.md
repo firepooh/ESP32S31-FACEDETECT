@@ -51,6 +51,10 @@ IDF_COMPONENT_LOCAL_STORAGE_URL = file://C:\Espressif\tools
 온라인 레지스트리에는 LVGL 9.3.0 이후 버전(9.4.0, 9.5.0, 9.6.0)이 올라와 있다.
 오프라인 저장소가 없는 환경이라면 이 문제가 생기지 않을 수도 있다.
 
+> 이후 LVGL PPA 그리기를 쓰려고 `~9.5.0`으로 올렸다. 9.5.0에서도 빌드와 동작을 확인했다.
+> 자세한 내용은 [DEMO_KO.md](DEMO_KO.md)의 "LVGL PPA 그리기" 절에 있다.
+> 아래 내용은 처음 9.4로 고정할 때의 기록이다.
+
 ## 해결 방법
 
 `main/idf_component.yml`에 LVGL 버전을 직접 지정한다.
